@@ -3,8 +3,8 @@ import { useAuth } from '../contexts/AuthContext';
 import api from '../api';
 import DashboardSummary from '../components/dashboard/DashboardSummary';
 import SpendingChart from '../components/dashboard/SpendingChart';
-import BudgetProgress from '../components/dashboard/BudgetProgress';
 import RecentTransactions from '../components/dashboard/RecentTransactions';
+import BudgetProgres from '../components/dashboard/BudgetProgres'
 
 
 const Dashboard = () => {
@@ -34,7 +34,7 @@ const Dashboard = () => {
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <SpendingChart data={data.transactions} />
-        <BudgetProgress budgets={data.active_budgets} />
+        <BudgetProgres budgets={data.active_budgets} />
       </div>
 
       <RecentTransactions transactions={data.transactions.slice(0, 5)} />

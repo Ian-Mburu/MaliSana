@@ -1,6 +1,6 @@
 import { LinearProgress, Typography, Box } from '@mui/material';
 
-const BudgetProgress = ({ budgets }) => {
+const BudgetProgres = ({ budgets }) => {
   const calculateProgress = (budget) => {
     const spent = budget.transactions?.reduce((sum, t) => sum + t.amount, 0) || 0;
     return (spent / budget.amount) * 100;
@@ -28,3 +28,5 @@ const BudgetProgress = ({ budgets }) => {
     </div>
   );
 };
+
+export default BudgetProgres;
