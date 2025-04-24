@@ -2,11 +2,11 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer # typ
 from rest_framework import serializers # type: ignore
 from django.contrib.auth.password_validation import validate_password # type: ignore
 from . import models as project_models
-from django.contrib.auth import authenticate
+from django.contrib.auth import get_user_model
 
 
 
-
+User = get_user_model()
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def __init__(self, *args, **kwargs):
@@ -53,3 +53,72 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
         
 
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = project_models.Category
+        fields = '__all__'
+        read_only_fields = ('user',)
+
+    def validate(self, data):
+        if data['type'] not in ['expense', 'income']:
+            raise serializers.ValidationError("Type must be either 'expense' or 'income'.")
+        return data
+    
+
+class TransactionSerializer(serializers.ModelSerializer):
+    category = serializers.SlugRelatedField(
+        slug_field='name',
+        queryset=project_models.Category.objects.all()
+    )
+
+    class Meta:
+        model = project_models.Transaction
+        fields = '__all__'
+        read_only_fields = ('user', 'created_at')
+
+
+class BudgetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = project_models.Budget
+        fields = '__all__'
+        read_only_fields = ('user', 'created_at')
+
+    def validate(self, data):
+        if data['start_date'] > data['end_date']:
+            raise serializers.ValidationError("Start date must be before end date.")
+        return data
+    
+class SavingGoalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = project_models.SavingGoal
+        fields = '__all__'
+        read_only_fields = ('user', 'created_at', 'status')
+
+class BillSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = project_models.Bill
+        fields = '__all__'
+        read_only_fields = ('user', 'created_at')
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = project_models.Notification
+        fields = '__all__'
+        read_only_fields = ('user', 'created_at')
+
+class DebtSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = project_models.Debt
+        fields = '__all__'
+        read_only_fields = ('user', 'created_at')
+
+class InvestmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = project_models.Investment
+        fields = '__all__'
+        read_only_fields = ('user', 'created_at')
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'full_name', 'tel_no']
