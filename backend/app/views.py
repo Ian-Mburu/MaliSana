@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from rest_framework_simplejwt.views import TokenObtainPairView # type: ignore
-from project import serializers as project_serializer
-from . models import models as project_models
+from . import models as project_models
+from . import serializers as project_serializer
 from rest_framework.generics import GenericAPIView # type: ignore
 from rest_framework.response import Response # type: ignore
 from rest_framework import status # type: ignore
 from rest_framework.permissions import IsAuthenticated # type: ignore
+from rest_framework.permissions import AllowAny # type: ignore
 
 
 
@@ -16,15 +17,12 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
 
 class Register(GenericAPIView):
-    queryset = project_models.User.objects.all()
     serializer_class = project_serializer.RegisterSerializer
-    permission_classes = [IsAuthenticated,]
+    permission_classes = [AllowAny]
 
-    def create(self, request, *args, **kwargs):
-        print("Received Data:", request.data)  # Debugging
+    def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            user = serializer.save()
+            serializer.save()
             return Response({"message": "User registered successfully"}, status=status.HTTP_201_CREATED)
-        print("Errors:", serializer.errors)  # Debugging
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

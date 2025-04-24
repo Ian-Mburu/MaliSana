@@ -35,12 +35,22 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000" 
 ]
 
+
+AUTHENTICATION_BACKENDS = [
+    'app.backends.TelNoBackend',
+    'django.contrib.auth.backends.ModelBackend',  # Default backend only
+]
+
 AUTH_USER_MODEL = "app.User"
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    # Custom app first
+    'app.apps.AppConfig',  # Must come before auth
+    
+    # Django built-ins
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -48,15 +58,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # custom apps
-    'app.apps.AppConfig',
-
-    # third-party apps
+    # Third-party apps
     'corsheaders',
-    'rest_framework',
+    'rest_framework', 
     'drf_yasg',
     'rest_framework_simplejwt'
-
 ]
 
 MIDDLEWARE = [
@@ -106,7 +112,7 @@ WSGI_APPLICATION = 'project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'malisana',
+        'NAME': 'mali',
         'USER': 'postgres',
         'PASSWORD': 'iano3535',
         'HOST': 'localhost',
