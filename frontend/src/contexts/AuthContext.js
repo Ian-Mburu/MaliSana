@@ -11,18 +11,30 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const checkAuth = async () => {
       const token = localStorage.getItem('access');
-      if (token) {
+      const refresh = localStorage.getItem('refresh');
+      if (token && refresh) {
         try {
+          // Verify token validity
+          await api.post('/token/verify/', { token });
           const decoded = jwtDecode(token);
           setUser(decoded);
         } catch (error) {
-          logout();
+          try {
+            // Attempt token refresh
+            const response = await api.post('/token/refresh/', { refresh });
+            localStorage.setItem('access', response.data.access);
+            const decoded = jwtDecode(response.data.access);
+            setUser(decoded);
+          } catch (refreshError) {
+            logout();
+          }
         }
       }
       setLoading(false);
     };
     checkAuth();
   }, []);
+  
 
   const login = async (credentials) => {
     const response = await api.login(credentials);

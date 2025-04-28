@@ -9,18 +9,43 @@ import BudgetProgres from '../components/dashboard/BudgetProgres'
 
 const Dashboard = () => {
   const [data, setData] = useState(null);
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+  
     const loadData = async () => {
-      const [dashboard, transactions] = await Promise.all([
-        api.getDashboard(),
-        api.getTransactions()
-      ]);
-      setData({ ...dashboard.data, transactions: transactions.data });
+      try {
+        const [dashboard, transactions] = await Promise.all([
+          api.get('/dashboard/', { signal: controller.signal }),
+          api.get('/transactions/', { signal: controller.signal })
+        ]);
+        
+        if (isMounted) {
+          setData({
+            total_savings: dashboard.data.total_savings,
+            monthly_spending: dashboard.data.monthly_spending,
+            total_debt: dashboard.data.total_debt,
+            transactions: transactions.data,
+            active_budgets: dashboard.data.active_budgets,
+            pending_bills: dashboard.data.pending_bills
+          });
+        }
+      } catch (error) {
+        if (error.response?.status === 401) {
+          logout();
+        }
+      }
     };
-    loadData();
-  }, []);
+  
+    if (user) loadData();
+    
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  }, [user, logout]);
 
   if (!data) return <div>Loading...</div>;
 

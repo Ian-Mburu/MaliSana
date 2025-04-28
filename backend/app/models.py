@@ -52,7 +52,7 @@ class Category(models.Model):
     
 
 class Transaction(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='transactions')
     amount = models.DecimalField(
         max_digits=12,
         decimal_places=2,

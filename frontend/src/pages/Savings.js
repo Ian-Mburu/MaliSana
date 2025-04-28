@@ -1,9 +1,16 @@
-import React from 'react'
+import React from 'react';
+import Dashboard from '../pages/Dashboard';
 
 function Savings() {
   return (
-    <div>Savings</div>
-  )
+    <>
+      <Dashboard />
+      <div className="p-6">
+        <h1 className="text-2xl font-bold mb-4">Savings Goals</h1>
+        {/* Add savings content here */}
+      </div>
+    </>
+  );
 }
 
-export default Savings
+export default Savings;

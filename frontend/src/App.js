@@ -9,10 +9,13 @@ import Bills from './pages/Bills';
 import Savings from './pages/Savings';
 import ProtectedRoute from './components/common/ProtectedRoute';
 
+import ErrorBoundary from '../src/components/error/ErrorBoundary'
+
 
 
 function App() {
   return (
+    <ErrorBoundary>
     <AuthProvider>
       <BrowserRouter>
         <Routes>
@@ -33,6 +36,7 @@ function App() {
         </Routes>
       </BrowserRouter>
     </AuthProvider>
+    </ErrorBoundary>
   );
 }
 
