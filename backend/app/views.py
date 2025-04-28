@@ -37,7 +37,7 @@ class Register(GenericAPIView):
 
 class CategoryViewSet(generics.ListCreateAPIView, generics.RetrieveUpdateDestroyAPIView):
     serializer_class = project_serializer.CategorySerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         return project_models.Category.objects.filter(user=self.request.user)
@@ -48,7 +48,7 @@ class CategoryViewSet(generics.ListCreateAPIView, generics.RetrieveUpdateDestroy
     
 class TransactionViewSet(generics.ListCreateAPIView, generics.RetrieveUpdateDestroyAPIView):
     serializer_class = project_serializer.TransactionSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         return project_models.Transaction.objects.filter(user=self.request.user)
@@ -59,7 +59,7 @@ class TransactionViewSet(generics.ListCreateAPIView, generics.RetrieveUpdateDest
     
 class BudgetViewSet(generics.ListCreateAPIView, generics.RetrieveUpdateDestroyAPIView):
     serializer_class = project_serializer.BudgetSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         return project_models.Budget.objects.filter(user=self.request.user)
@@ -71,7 +71,7 @@ class BudgetViewSet(generics.ListCreateAPIView, generics.RetrieveUpdateDestroyAP
 class SavingGoalViewSet(generics.ListCreateAPIView,
                         generics.RetrieveUpdateDestroyAPIView):
     serializer_class = project_serializer.SavingGoalSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         return project_models.SavingGoal.objects.filter(user=self.request.user)
@@ -82,7 +82,7 @@ class SavingGoalViewSet(generics.ListCreateAPIView,
 class BillViewSet(generics.ListCreateAPIView,
                   generics.RetrieveUpdateDestroyAPIView):
     serializer_class = project_serializer.BillSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         return project_models.Bill.objects.filter(user=self.request.user)
@@ -93,7 +93,7 @@ class BillViewSet(generics.ListCreateAPIView,
 class NotificationViewSet(generics.ListAPIView,
                          generics.UpdateAPIView):
     serializer_class = project_serializer.NotificationSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         return project_models.Notification.objects.filter(user=self.request.user)
@@ -115,7 +115,7 @@ class NotificationViewSet(generics.ListAPIView,
 class DebtViewSet(generics.ListCreateAPIView,
                   generics.RetrieveUpdateDestroyAPIView):
     serializer_class = project_serializer.DebtSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         return project_models.Debt.objects.filter(user=self.request.user)
@@ -126,7 +126,7 @@ class DebtViewSet(generics.ListCreateAPIView,
 class InvestmentViewSet(generics.ListCreateAPIView,
                         generics.RetrieveUpdateDestroyAPIView):
     serializer_class = project_serializer.InvestmentSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         return project_models.Investment.objects.filter(user=self.request.user)
@@ -136,7 +136,7 @@ class InvestmentViewSet(generics.ListCreateAPIView,
 
 
 class DashboardView(APIView):
-    permissions_classes = [IsAuthenticated]
+    permissions_classes = [AllowAny]
 
     def get(self, request):
         user = request.user
