@@ -1,9 +1,14 @@
 import React from 'react'
+import Dashboard from './Dashboard'
 
-function Bills() {
+function 
+Bills() {
   return (
-    <div>Bills</div>
+    <div>
+      <Dashboard />
+      Bills</div>
   )
 }
 
-export default Bills
+export default 
+Bills

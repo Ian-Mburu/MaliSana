@@ -140,14 +140,41 @@ class DashboardView(APIView):
 
     def get(self, request):
         user = request.user
-        data = {
-            'total_savings': SavingGoal.objects.filter(user=user).aggregate(Sum('current_amount'))['current_amount__sum'] or 0,
-            'total_debt': Debt.objects.filter(user=user).aggregate(Sum('total_amount'))['total_amount__sum'] or 0,
-            'monthly_spending': Transaction.objects.filter(
-                user=user,
-                date__month=timezone.now().month
-            ).aggregate(Sum('amount'))['amount__sum'] or 0,
-            'active_budgets': Budget.objects.filter(user=user, end_date__gte=timezone.now()).count(),
-            'pending_bills': Bill.objects.filter(user=user, paid=False).count()
-        }
-        return Response(data)
+        try:
+            # Get budget data with calculations
+            budgets = Budget.objects.filter(
+                user=user, 
+                end_date__gte=timezone.now().date()
+            ).annotate(
+                spent=Sum('category__transaction__amount')
+            )
+
+            return Response({
+                'total_savings': SavingGoal.objects.filter(user=user).aggregate(
+                    Sum('current_amount')
+                )['current_amount__sum'] or 0,
+                'total_debt': Debt.objects.filter(user=user).aggregate(
+                    Sum('total_amount')
+                )['total_amount__sum'] or 0,
+                'monthly_spending': Transaction.objects.filter(
+                    user=user,
+                    date__month=timezone.now().month
+                ).aggregate(Sum('amount'))['amount__sum'] or 0,
+                'active_budgets': [
+                    {
+                        'id': b.id,
+                        'category': b.category.name,
+                        'amount': float(b.amount),
+                        'spent': float(b.spent or 0)
+                    } for b in budgets
+                ],
+                'pending_bills': Bill.objects.filter(
+                    user=user, 
+                    paid=False
+                ).count()
+            })
+        except Exception as e:
+            return Response(
+                {'error': str(e)}, 
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )

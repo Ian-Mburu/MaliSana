@@ -1,9 +1,9 @@
 import { LinearProgress, Typography, Box } from '@mui/material';
 
-const BudgetProgres = ({ budgets }) => {
+const BudgetProgress = ({ budgets }) => {
   const calculateProgress = (budget) => {
-    const spent = budget.transactions?.reduce((sum, t) => sum + t.amount, 0) || 0;
-    return (spent / budget.amount) * 100;
+    if (!budget.amount) return 0;
+    return (budget.spent / budget.amount) * 100;
   };
 
   return (
@@ -12,7 +12,7 @@ const BudgetProgres = ({ budgets }) => {
         Budget Progress
       </Typography>
       
-      {budgets.map(budget => (
+      {budgets?.map(budget => (
         <Box key={budget.id} className="mb-4">
           <Typography variant="body2">{budget.category}</Typography>
           <LinearProgress
@@ -21,12 +21,18 @@ const BudgetProgres = ({ budgets }) => {
             color={calculateProgress(budget) > 100 ? 'error' : 'primary'}
           />
           <Typography variant="caption">
-            ${budget.spent || 0} of ${budget.amount}
+            Ksh {budget.spent.toFixed(2)} of Ksh {budget.amount.toFixed(2)}
           </Typography>
         </Box>
       ))}
+      
+      {!budgets?.length && (
+        <Typography variant="body2" color="textSecondary">
+          No active budgets
+        </Typography>
+      )}
     </div>
   );
 };
 
-export default BudgetProgres;
+export default BudgetProgress;

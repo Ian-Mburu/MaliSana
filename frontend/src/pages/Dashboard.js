@@ -4,17 +4,19 @@ import api from '../api';
 import DashboardSummary from '../components/dashboard/DashboardSummary';
 import SpendingChart from '../components/dashboard/SpendingChart';
 import RecentTransactions from '../components/dashboard/RecentTransactions';
-import BudgetProgres from '../components/dashboard/BudgetProgres'
+import BudgetProgress from '../components/dashboard/BudgetProgress'
 
 
 const Dashboard = () => {
   const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);  // Add loading state
+  const [error, setError] = useState(null);
   const { user, logout } = useAuth();
 
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
-  
+
     const loadData = async () => {
       try {
         const [dashboard, transactions] = await Promise.all([
@@ -31,14 +33,19 @@ const Dashboard = () => {
             active_budgets: dashboard.data.active_budgets,
             pending_bills: dashboard.data.pending_bills
           });
+          setLoading(false);
         }
       } catch (error) {
-        if (error.response?.status === 401) {
-          logout();
+        if (isMounted) {
+          setLoading(false);
+          setError(error.message);
+          if (error.response?.status === 401) {
+            logout();
+          }
         }
       }
     };
-  
+
     if (user) loadData();
     
     return () => {
@@ -47,7 +54,8 @@ const Dashboard = () => {
     };
   }, [user, logout]);
 
-  if (!data) return <div>Loading...</div>;
+  if (loading) return <div className="p-6">Loading financial data...</div>;
+  if (error) return <div className="p-6 text-red-500">Error: {error}</div>;
 
   return (
     <div className="p-6 space-y-8">
@@ -59,7 +67,7 @@ const Dashboard = () => {
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <SpendingChart data={data.transactions} />
-        <BudgetProgres budgets={data.active_budgets} />
+        <BudgetProgress budgets={data.active_budgets} />
       </div>
 
       <RecentTransactions transactions={data.transactions.slice(0, 5)} />

@@ -1,8 +1,11 @@
 import React from 'react'
+import Dashboard from './Dashboard'
 
 function Budgets() {
   return (
-    <div>Budgets</div>
+    <div>
+      <Dashboard />
+      Budgets</div>
   )
 }
 
