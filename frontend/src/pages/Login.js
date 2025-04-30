@@ -38,7 +38,7 @@ const Login = () => {
       <div className="login-container">
         <form className="login-form" onSubmit={handleSubmit}>
           <h2>Login to Your Account</h2>
-          {error && <p className="error-message">{error}</p>}
+          {/* {error && <p style={{color: 'blue'}} className="error-message">{error}</p>} */}
           <input
             type="tel"
             placeholder="Phone Number"

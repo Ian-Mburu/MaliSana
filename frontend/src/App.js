@@ -28,10 +28,7 @@ function App() {
           
           <Route element={<ProtectedRoute />}>
             <Route path="/" element={<Dashboard />} />
-            {/* <Route path="/transactions" element={<Transactions />} /> */}
-            {/* <Route path="/budgets" element={<Budgets />} />
-            <Route path="/savings" element={<Savings />} />
-            <Route path="/bills" element={<Bills />} /> */}
+            
           </Route>
         </Routes>
       </BrowserRouter>
