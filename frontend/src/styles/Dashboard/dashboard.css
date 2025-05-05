@@ -1,0 +1,22 @@
+.dash-1 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10rem;
+}
+
+.header-1 {
+    font-size: 25px;
+    font-weight: bold;
+    color: #000;
+}
+
+.lists {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    justify-content: center;
+    align-items: center;
+}
+
