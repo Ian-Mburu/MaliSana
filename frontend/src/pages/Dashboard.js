@@ -25,9 +25,9 @@ const Dashboard = () => {
         <a href="bills"> <FaMoneyBills /> Bills</a>
         <a href="home"> <FiCreditCard /> Goals</a>
         <a href="investments"> <FiTrendingUp /> Investments</a>
-        <a href="home">Login</a>
         <a href="home"> <FiUser /> Profile</a>
         <a href="home"> <FiSettings /> Settings</a>
+        <a href="login">Login</a>
         <FiBell /> 
       </div>
     </div>

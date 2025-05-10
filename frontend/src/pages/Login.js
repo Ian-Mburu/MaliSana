@@ -26,7 +26,7 @@ const Login = () => {
       localStorage.setItem('refresh_token', refresh);
 
       dispatch(setCredentials({user: {tel_no}, token: access}));
-      navigate('/savings');
+      navigate('/home');
     } catch (error) {
       setError('Invalid email or password. Please try again.')
     }
