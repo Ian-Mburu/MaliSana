@@ -18,6 +18,7 @@ api.interceptors.request.use(config => {
 });
 
 // Add response interceptor
+// Unified interceptor approach
 api.interceptors.response.use(
   response => response,
   async error => {
@@ -27,18 +28,18 @@ api.interceptors.response.use(
       originalRequest._retry = true;
       
       try {
-        const refresh = localStorage.getItem('refresh');
+        const refresh = localStorage.getItem('refresh_token');
         const response = await axios.post(
           'http://localhost:8000/api/token/refresh/',
-          { refresh }
+          { refresh }  // Match Django's expected field name
         );
         
-        localStorage.setItem('access', response.data.access);
+        localStorage.setItem('access_token', response.data.access);
         originalRequest.headers.Authorization = `Bearer ${response.data.access}`;
         return api(originalRequest);
       } catch (refreshError) {
-        localStorage.removeItem('access');
-        localStorage.removeItem('refresh');
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
         window.location.href = '/login';
       }
     }

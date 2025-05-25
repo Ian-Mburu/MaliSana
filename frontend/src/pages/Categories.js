@@ -14,7 +14,7 @@ const Categories = () => {
   const { user, loading: authLoading } = useAuth();
 
   useEffect(() => {
-    if (!authLoading && user) {
+    if (!authLoading && user && localStorage.getItem('access_token')) {
       fetchCategories();
     }
   }, [authLoading, user]);
