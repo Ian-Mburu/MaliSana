@@ -19,8 +19,8 @@ const Dashboard = () => {
 
       <div className="lists">
         <a href="home"> <FiHome /> Home</a>
-        <a href="home"> <FiPieChart /> Budget</a>
-        <a href="home"> <FiDollarSign /> Transactions</a>
+        <a href="budgets"> <FiPieChart /> Budget</a>
+        <a href="transactions"> <FiDollarSign /> Transactions</a>
         <a href="Savings"> <FiTarget /> Savings</a>
         <a href="bills"> <FaMoneyBills /> Bills</a>
         <a href="home"> <FiCreditCard /> Goals</a>

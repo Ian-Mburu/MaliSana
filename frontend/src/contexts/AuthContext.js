@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
-import api from '../api';
+import api from '../api'; // Correct import path
 
 const AuthContext = createContext();
 
@@ -12,15 +12,16 @@ export const AuthProvider = ({ children }) => {
     const checkAuth = async () => {
       const token = localStorage.getItem('access');
       const refresh = localStorage.getItem('refresh');
+      
       if (token && refresh) {
         try {
-          // Verify token validity
+          // Use the api instance instead of direct axios calls
           await api.post('/token/verify/', { token });
           const decoded = jwtDecode(token);
           setUser(decoded);
         } catch (error) {
           try {
-            // Attempt token refresh
+            // Use api instance for refresh
             const response = await api.post('/token/refresh/', { refresh });
             localStorage.setItem('access', response.data.access);
             const decoded = jwtDecode(response.data.access);
@@ -34,14 +35,19 @@ export const AuthProvider = ({ children }) => {
     };
     checkAuth();
   }, []);
-  
 
-  const login = async (credentials) => {
-    const response = await api.login(credentials);
+const login = async (credentials) => {
+  try {
+    const response = await api.post('/token/', credentials);
     localStorage.setItem('access', response.data.access);
     localStorage.setItem('refresh', response.data.refresh);
-    setUser(jwtDecode(response.data.access));
-  };
+    const decoded = jwtDecode(response.data.access);
+    setUser(decoded);
+  } catch (error) {
+    console.error('Login failed:', error.response?.data);
+    throw error;
+  }
+};
 
   const logout = () => {
     localStorage.removeItem('access');

@@ -4,8 +4,12 @@ from . import views as app_views
 from .views import *
 from rest_framework.routers import DefaultRouter # type: ignore
 from .views import Register, DashboardView
+from . import views
 
 
+
+router = DefaultRouter()
+router.register(r'categories', views.CategoryViewSet, basename='category')
 
 
 
@@ -13,6 +17,7 @@ urlpatterns = [
     # Authentication Endpoints
     path('login/', app_views.MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('register/', Register.as_view(), name='register'),
+    path('token/', views.MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('dashboard/', DashboardView.as_view(), name='dashboard'),
